@@ -1,11 +1,30 @@
+import { useContext, useState } from "react"
 import { Box, Divider, Drawer, IconButton, Input, InputAdornment, List, ListItem, ListItemIcon, ListItemText, ListSubheader } from "@mui/material"
 import { AccountCircleOutlined, AdminPanelSettings, CategoryOutlined, ConfirmationNumberOutlined, EscalatorWarningOutlined, FemaleOutlined, LoginOutlined, MaleOutlined, SearchOutlined, VpnKeyOutlined } from "@mui/icons-material"
+import { UiContext } from "../../context"
+import { useRouter } from "next/router"
 
 
 export const SideMenu = () => {
+    const {isMenuOpen,toggleSideMenu} =  useContext(UiContext);
+    const router = useRouter();
+    const [searchTerm,setSearchTerm] = useState('');
+
+  const onSearchTerm = () => {
+     if(searchTerm.trim().length === 0) return;
+     navigateTo(`/search/${searchTerm}`)
+
+  }
+    const navigateTo = (url:string) =>{
+     toggleSideMenu();
+     router.push(url);
+    }
+
+
   return (
     <Drawer
-        open={ false }
+        onClose={toggleSideMenu}
+        open={ isMenuOpen }
         anchor='right'
         sx={{ backdropFilter: 'blur(4px)', transition: 'all 0.5s ease-out' }}
     >
@@ -15,12 +34,16 @@ export const SideMenu = () => {
 
                 <ListItem>
                     <Input
+                        autoFocus
+                        value={searchTerm}
+                        onChange={(e)=> setSearchTerm(e.target.value)}
+                        onKeyDown={(e) => e.key === 'Enter' ? onSearchTerm() : null}
                         type='text'
                         placeholder="Buscar..."
                         endAdornment={
                             <InputAdornment position="end">
                                 <IconButton
-                                aria-label="toggle password visibility"
+                                 onClick={onSearchTerm}
                                 >
                                  <SearchOutlined />
                                 </IconButton>
@@ -44,21 +67,27 @@ export const SideMenu = () => {
                 </ListItem>
 
 
-                <ListItem button sx={{ display: { xs: '', sm: 'none' } }}>
+                <ListItem 
+                onClick={()=>navigateTo('/category/men')}
+                button sx={{ display: { xs: '', sm: 'none' } }}>
                     <ListItemIcon>
                         <MaleOutlined/>
                     </ListItemIcon>
                     <ListItemText primary={'Hombres'} />
                 </ListItem>
 
-                <ListItem button sx={{ display: { xs: '', sm: 'none' } }}>
+                <ListItem
+                  onClick={()=>navigateTo('/category/women')}
+                button sx={{ display: { xs: '', sm: 'none' } }}>
                     <ListItemIcon>
                         <FemaleOutlined/>
                     </ListItemIcon>
                     <ListItemText primary={'Mujeres'} />
                 </ListItem>
 
-                <ListItem button sx={{ display: { xs: '', sm: 'none' } }}>
+                <ListItem 
+                 onClick={()=>navigateTo('/category/kid')}
+                button sx={{ display: { xs: '', sm: 'none' } }}>
                     <ListItemIcon>
                         <EscalatorWarningOutlined/>
                     </ListItemIcon>
