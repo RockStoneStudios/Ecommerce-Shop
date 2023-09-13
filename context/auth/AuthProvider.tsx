@@ -1,7 +1,7 @@
 
 import {FC,ReactNode,useEffect,useReducer}  from 'react';
 import { AuthContext } from  '.';
-
+import {useSession,signOut} from 'next-auth/react'
 import { IUser } from '../../interfaces';
 import { authReducer } from '.';
 import { tesloApi } from '../../api';
@@ -25,10 +25,18 @@ const AUTH_INITIAL_STATE: AuthState = {
 export const AuthProvider:FC<AuthState> = ({children})=> {
   const [state,dispatch] = useReducer(authReducer,AUTH_INITIAL_STATE);
   const router = useRouter();
+   const {data,status} = useSession();
+ 
+    
+   useEffect(()=>{
+      if(status === 'authenticated'){
+        dispatch({type : '[Auth] - Login',payload : data?.user as IUser})
+      }
+   },[status,data])
 
-    useEffect(()=> {
-       checkToken();
-    },[])
+    // useEffect(()=> {
+    //    checkToken();
+    // },[])
  
      const checkToken = async () => {
       if(!Cookies.get('token')) return;
@@ -49,6 +57,8 @@ export const AuthProvider:FC<AuthState> = ({children})=> {
         const {token,user} = data;
         Cookies.set('token',token);
         dispatch({type : '[Auth] - Login',payload: user});
+        console.log({user});
+        
         return true;
      }catch(error){
         return false;
@@ -56,7 +66,7 @@ export const AuthProvider:FC<AuthState> = ({children})=> {
    }
 
    const logout = () => {
-    Cookies.remove('token');
+    // Cookies.remove('token');
     Cookies.remove('cart');
     Cookies.remove('firstName');
     Cookies.remove('lastName');
@@ -66,7 +76,8 @@ export const AuthProvider:FC<AuthState> = ({children})=> {
     Cookies.remove('neighborhood');
     Cookies.remove('municipality');
     Cookies.remove('phone');
-    router.reload();
+    signOut();
+    
    }
 
 

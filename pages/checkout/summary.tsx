@@ -4,18 +4,32 @@ import { Link, Box, Button, Card, CardContent, Divider, Grid, Typography } from 
 
 import { ShopLayout } from '../../components/layouts/ShopLayout';
 import { CartList, OrderSummary } from '../../components/cart';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { CartContext } from '../../context';
 import { municipios } from '../../utils/municipios';
+import Cookies from 'js-cookie';
+import { useRouter } from 'next/router';
 
 
 
 const SummaryPage = () => {
-    const {shippingAddres,numberOfItems} = useContext(CartContext);
+    const router = useRouter();
+    const {shippingAddres,numberOfItems,createOrder} = useContext(CartContext);
+
+    useEffect(()=>{
+        if(!Cookies.get('firstName')){
+            router.push('/checkout/address');
+        }
+    },[router])
+
     if(!shippingAddres) {
         return 
         <>
         </>
+    }
+
+    const onCreateOrder = () =>{
+        createOrder();
     }
 
     const {firstName,lastName,address,address2, neighborhood, municipality,phone} = shippingAddres;
@@ -46,7 +60,7 @@ const SummaryPage = () => {
                         <Typography>{firstName} {lastName}</Typography>
                         <Typography>{address}</Typography>
                         <Typography>{neighborhood}</Typography>
-                        <Typography>{municipios.filter(c => c.code === municipality)[0].name}</Typography>
+                        <Typography>{municipality}</Typography>
                         <Typography>{phone}</Typography>
 
                         <Divider sx={{ my:1 }} />
@@ -62,7 +76,9 @@ const SummaryPage = () => {
                         <OrderSummary />
 
                         <Box sx={{ mt: 3 }}>
-                            <Button color="secondary" className='circular-btn' fullWidth>
+                            <Button 
+                             onClick={onCreateOrder}
+                             color="secondary" className='circular-btn' fullWidth>
                                 Confirmar Orden
                             </Button>
                         </Box>

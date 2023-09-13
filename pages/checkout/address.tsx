@@ -6,7 +6,7 @@ import { jwt,municipios } from "../../utils";
 import { useForm } from "react-hook-form";
 import Cookie from 'js-cookie';
 import { useRouter } from "next/router";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { CartContext } from "../../context";
 
 type FormData= {
@@ -36,11 +36,23 @@ const getAddressfromCookies = ():FormData => {
 const AddressPage = () => {
     const router = useRouter();
     const {updateAddress} = useContext(CartContext)
-    const {register,handleSubmit,formState:{errors}} = useForm<FormData>({
-        defaultValues :  getAddressfromCookies()
-            
+    const {register,handleSubmit,formState:{errors},reset} = useForm<FormData>({
+        defaultValues :  {
+            firstName : '',
+            lastName: '',
+            address : '',
+            address2 : '',
+            zip : '',
+            neighborhood : '',
+            municipality : municipios[0].name,
+            phone : ''
+        }
         
     });
+
+    useEffect(()=>{
+       reset(getAddressfromCookies())
+    },[reset])
 
    const onSubmitAddress = (data : FormData) =>{ 
      
@@ -111,9 +123,10 @@ const AddressPage = () => {
                 </Grid>
                 
                 <Grid item xs={12} sm={ 6 }>
-                    <FormControl fullWidth>
+                    {/* <FormControl fullWidth> */}
                         <TextField
-                            select
+                            fullWidth
+                            // select
                             variant="filled"
                             label="Municipio"
                             defaultValue={Cookie.get('municipality') || municipios[0].code}
@@ -122,7 +135,7 @@ const AddressPage = () => {
                             })}
                             
                         >
-                            {
+                            {/* {
                                 municipios.map(municipio => (
                                     <MenuItem
                                     key={municipio.code}
@@ -131,9 +144,9 @@ const AddressPage = () => {
                                     {municipio.name}
                                     </MenuItem>
                                 ))
-                            }
+                            } */}
                         </TextField>
-                    </FormControl>
+                    {/* </FormControl> */}
                 </Grid>
                 <Grid item xs={12} sm={ 6 }>
                     <TextField 
