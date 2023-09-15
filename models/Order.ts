@@ -18,14 +18,14 @@ const orderSchema = new Schema({
         }
      ],
      shippingAddress : {
-        firstName : {type : String, required : true},
-        lastName  : {type : String, required: true},
-        address   : {type : String, required : true},
-        address2  : {type : String},
-        zip       : {type : String, required : true},
-        city      : {type : String, required: true},
-        country   : {type : String, required : true},
-        phone     : {type : String, required : true}
+        firstName     : {type : String, required : true},
+        lastName      : {type : String, required: true},
+        address       : {type : String, required : true},
+        address2      : {type : String},
+        zip           : {type : String, required : true},
+        neighborhood  : {type : String, required: true},
+        municipality   : {type : String, required : true},
+        phone         : {type : String, required : true}
      },
      numberOfItems : {type : Number, required : true},
      subTotal      : {type : Number ,required: true},

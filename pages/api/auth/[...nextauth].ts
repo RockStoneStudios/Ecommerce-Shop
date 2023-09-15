@@ -6,8 +6,7 @@ import { dbUser } from "../../../database";
 
 
 export default NextAuth({
-    providers : [
-        
+    providers : [ 
           Credentials({
             name : 'Custom Login',
             credentials : {

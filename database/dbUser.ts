@@ -44,7 +44,7 @@ export const oAuthToDbUser = async (oAuthEmail:string,oAuthName:string) => {
     const newUser = new User({email:oAuthEmail,name:oAuthName,password:'@',role :'client'});
     await newUser.save();
     await db.disconnect();
-    
+    console.log('db',newUser);
     const {_id,name,email,role} = newUser;
 
     return { _id,name,email,role};
