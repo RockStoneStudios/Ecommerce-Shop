@@ -5,6 +5,7 @@ import Cookie from 'js-cookie';
 import { tesloApi } from '../../api';
 import axios from 'axios';
 
+
 export interface CartState{
     isLoaded         : boolean;
     cart             : ICartProduct[],
@@ -139,7 +140,8 @@ export const CartProvider:FC<CartState> = ({children}) => {
         try{
          const {data} = await tesloApi.post<IOrder>('/orders',body);
 
-        //  dispatch({type : '[Cart] - Order complete'});
+         dispatch({type : '[Cart] - Order complete'});
+         Cookie.set("cart", JSON.stringify([]));
         //  console.log(data);
         return {
             hasError : false,

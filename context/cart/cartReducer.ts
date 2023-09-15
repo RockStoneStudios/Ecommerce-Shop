@@ -7,7 +7,7 @@ type CartActionType = | {type: '[Cart] - LoadCart from cookies | storage',payloa
                       | {type: '[Cart] - Remove product in cart',payload : ICartProduct}
                       | {type : '[Cart] - LoadAddress from Cookies', payload: ShippingAddress }
                       | {type : '[Cart] - Update Address', payload: ShippingAddress}
-                    //   | {type : '[Cart] - Order complete'}
+                      | {type : '[Cart] - Order complete'}
                       | {type : '[Cart] - Update order summary'
                       payload : {
                         numberOfItems : number;
@@ -58,16 +58,16 @@ export const cartReducer = (state : CartState,action : CartActionType):CartState
                     ...state,
                     shippingAddress : action.payload
                 }
-        // case '[Cart] - Order complete' :
-        // return {
-        //     ...state,
-        //     cart:[],
-        //     numberOfItems : 0,
-        //     subTotal : 0,
-        //     tax : 0,
-        //     total : 0
+        case '[Cart] - Order complete' :
+        return {
+            ...state,
+            cart:[],
+            numberOfItems : 0,
+            subTotal : 0,
+            tax : 0,
+            total : 0
 
-        // }
+        }
 
 
         default:
