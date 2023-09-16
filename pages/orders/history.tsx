@@ -31,7 +31,7 @@ const columns: GridColDef[] = [
         sortable: false,
         renderCell: (params: GridValueGetterParams) => {
             return (
-               <NextLink href={`/orders/${ params.row.id }`} passHref>
+               <NextLink href={`/orders/${ params.row.orderId }`} passHref>
                     <Link underline='always'>
                         Ver orden
                     </Link>
@@ -42,23 +42,25 @@ const columns: GridColDef[] = [
 ];
 
 
-const rows = [
-    { id: 1, paid: true, fullname: 'Fernando Herrera' },
-    { id: 2, paid: false, fullname: 'Melissa Flores' },
-    { id: 3, paid: true, fullname: 'Hernando Vallejo' },
-    { id: 4, paid: false, fullname: 'Emin Reyes' },
-    { id: 5, paid: false, fullname: 'Eduardo Rios' },
-    { id: 6, paid: true, fullname: 'Natalia Herrera' },
-]
+
+interface Props {
+  orders: IOrder[];
+}
 
 
-const HistoryPage = () => {
+const HistoryPage:NextPage<Props> = ({orders}) => {
+    const rows = orders.map((order,idx)=>({
+       id: idx+1,
+       paid : order.isPaid,
+       fullname : `${order.shippingAddress?.firstName} ${order.shippingAddress?.lastName}`,
+       orderId: order._id
+    }))
   return (
     <ShopLayout title={'Historial de ordenes'} pageDescription={'Historial de ordenes del cliente'}>
         <Typography variant='h1' component='h1'>Historial de ordenes</Typography>
 
 
-        <Grid container>
+        <Grid container className='fadeIn'>
             <Grid item xs={12} sx={{ height:650, width: '100%' }}>
                 <DataGrid 
                     rows={ rows }
@@ -74,4 +76,45 @@ const HistoryPage = () => {
   )
 }
 
-export default HistoryPage
+// You should use getServerSideProps when:
+// - Only if you need to pre-render a page whose data must be fetched at request time
+import { GetServerSideProps, NextPage } from 'next'
+import { getServerSession } from 'next-auth/next';
+import  authOptions  from '../api/auth/[...nextauth]';
+import { User } from '../../models';
+import { dbOrders } from '../../database';
+import { IOrder } from '../../interfaces';
+
+export const getServerSideProps: GetServerSideProps = async ({req,res}) => {
+   
+    const session:any = await getServerSession(req,res,authOptions);
+ 
+    if(!session){
+        return {
+            redirect: {
+                destination : '/auth/login?p=/orders/history',
+                permanent : false
+            }
+        }
+    }
+
+    const userId = await User.findOne({email : session.user.email});
+  
+
+
+        const orders = await dbOrders.getOrdersByUser(userId?._id.toString())
+ 
+
+    return {
+        props: {
+            orders
+        }
+    }
+}
+
+
+
+
+
+
+export default HistoryPage;
