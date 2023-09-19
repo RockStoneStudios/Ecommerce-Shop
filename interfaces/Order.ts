@@ -14,6 +14,7 @@ export interface IOrder {
     total           : number;
     isPaid          : boolean;
     paidAt          : string;
+    transactionId? : string;
 
 }
 
