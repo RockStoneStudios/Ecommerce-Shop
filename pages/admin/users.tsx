@@ -79,7 +79,7 @@ const UserPage = () => {
    
    >
 
-<Grid container className='fadeIn'>
+       <Grid container className='fadeIn'>
             <Grid item xs={12} sx={{ height:650, width: '100%' }}>
                 <DataGrid 
                     rows={ rows }
