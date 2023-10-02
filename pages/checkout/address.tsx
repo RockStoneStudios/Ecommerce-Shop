@@ -125,6 +125,7 @@ const AddressPage = () => {
                 <Grid item xs={12} sm={ 6 }>
                     {/* <FormControl fullWidth> */}
                         <TextField
+                            key={Cookie.get('municipality') || municipios[0].code}
                             fullWidth
                             // select
                             variant="filled"
@@ -133,7 +134,7 @@ const AddressPage = () => {
                             {...register('municipality',{
                                 required : 'Este Campo es requerido'
                             })}
-                            
+                            error={!!errors.municipality}
                         >
                             {/* {
                                 municipios.map(municipio => (

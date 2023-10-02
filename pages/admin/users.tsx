@@ -13,13 +13,14 @@ const UserPage = () => {
  
      const {data,error} = useSWR<IUser[]>('/api/admin/users');
      const [users,setUsers] = useState<IUser[]>([]);
+     useEffect(()=>{
+        if(data){
+           setUsers(data);
+        }
+     },[data]);
+     
      if(!data && ! error) return (<></>);
 
-      useEffect(()=>{
-         if(data){
-            setUsers(data);
-         }
-      },[data]);
 
      const onRoleUpdate = async (userId:string,newRole:string) =>{
 
@@ -84,8 +85,12 @@ const UserPage = () => {
                 <DataGrid 
                     rows={ rows }
                     columns={ columns }
-                    pageSize={ 10 }
-                    rowsPerPageOptions={ [10] }
+                    initialState={{
+                        pagination: { 
+                          paginationModel: { pageSize: 5 } 
+                        },
+                      }}
+                      pageSizeOptions={[5, 10, 25]}
                 />
 
             </Grid>

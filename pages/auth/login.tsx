@@ -33,17 +33,7 @@ const LoginPage = () => {
 
       const onLoginUser = async({email,password} : FormData) =>{
         setShowError(false);
-        // const isValidLogin =  await loginUser(email,password);
-
-        //  if(!isValidLogin) {
-        //     setShowError(true);
-        //     setTimeout(()=>{
-        //         setShowError(false);
-        //     },3100);
-        //     return;
-        //  }
-        //  const destination = router.query.p?.toString() || '/';
-        //  router.replace(destination);
+      
         await signIn('credentials',{email,password});
         
       }
@@ -96,6 +86,7 @@ const LoginPage = () => {
 
                     <Grid item xs={12} display='flex' justifyContent='end'>
                         <NextLink
+                         legacyBehavior
                          href={ router.query.p ? `/auth/register?p=${router.query.p}` : "/auth/register"}  passHref>
                             <Link underline='always'>
                                 ¿No tienes cuenta?
@@ -109,14 +100,15 @@ const LoginPage = () => {
 
                                 if(provider.id ==='credentials') return (<div key='credentials'></div>)
                                 return(
-                                    <Button 
+                                  <Button 
                                     onClick={()=> signIn(provider.id)}
+                                    sx={{mb : 2}}
                                     fullWidth 
                                     color = 'primary'
                                     variant='outlined' 
                                     key={provider.id}>
                                         {provider.name}
-                                    </Button>
+                                 </Button>
                                 )
                               })
                            }

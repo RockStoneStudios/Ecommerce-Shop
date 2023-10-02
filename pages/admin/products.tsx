@@ -1,7 +1,7 @@
 
 import { AdminLayout } from '../../components/layouts'
-import { CategoryOutlined } from '@mui/icons-material'
-import { CardMedia, Chip, Grid , Link} from '@mui/material'
+import { AddOutlined, CategoryOutlined } from '@mui/icons-material'
+import { Box, Button, CardMedia, Chip, Grid , Link} from '@mui/material'
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import useSWR from 'swr';
 import {  IProduct } from '../../interfaces';
@@ -19,7 +19,7 @@ const columns: GridColDef[] = [
                component='img'
                alt={row.title}
                className='fadeIn'
-               image={ `/products/${row.img}`}
+               image={ row.img}
               />
           </a>
         )
@@ -76,13 +76,29 @@ const ProductsPage = () => {
     title={`Productos (${data?.length})`}
     subtitle='Mantenimiento de Productos' 
     icon={<CategoryOutlined/>}>
+
+     <Box display= "flex" justifyContent="end" sx={{mb : 2}}>
+         <Button
+          startIcon= {<AddOutlined/>}
+          color='secondary'
+          href='/admin/products/new'
+         >
+           Agregar Producto
+         </Button>
+     </Box>
+    
+
       <Grid container className='fadeIn'>
             <Grid item xs={12} sx={{ height:650, width: '100%' }}>
                 <DataGrid 
                     rows={ rows }
                     columns={ columns }
-                    pageSize={ 10 }
-                    rowsPerPageOptions={ [10] }
+                    initialState={{
+                      pagination : {
+                         paginationModel : {pageSize:10}
+                      }
+                    }}
+                    pageSizeOptions={ [10,15,25] }
                 />
 
             </Grid>

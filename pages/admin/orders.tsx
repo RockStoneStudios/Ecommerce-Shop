@@ -9,9 +9,9 @@ import { IOrder, IUser } from '../../interfaces';
 
 const columns: GridColDef[] = [
      {field : 'id',headerName: 'Orden ID', width:250},
-     {field :  'email', headerName : 'Correo', width:250},
-     {field : 'name' , headerName : 'Nombre Completo',width:250},
-     {field : 'total', headerName : 'Monto Total',width: 250},
+     {field :  'email', headerName : 'Correo', width:200},
+     {field : 'name' , headerName : 'Nombre Completo',width:200},
+     {field : 'total', headerName : 'Monto Total',width: 200},
      {
       field: 'isPaid',
       headerName : 'Pagada',
@@ -22,7 +22,7 @@ const columns: GridColDef[] = [
            : (<Chip variant='outlined' label= 'Pendiente' color='error' />)
       }
      },
-     {field : 'noProducts', headerName : 'No.Productos',align : 'center', width:100 },
+     {field : 'noProducts', headerName : 'No.Productos',align : 'center', width:200 },
      {
       field: 'check',
       headerName : 'Ver orden',
@@ -71,8 +71,12 @@ const Orders = () => {
                 <DataGrid 
                     rows={ rows }
                     columns={ columns }
-                    pageSize={ 10 }
-                    rowsPerPageOptions={ [10] }
+                    initialState={{
+                      pagination: { 
+                        paginationModel: { pageSize: 8 } 
+                      },
+                    }}
+                    pageSizeOptions={[8, 16, 24]}
                 />
 
             </Grid>
